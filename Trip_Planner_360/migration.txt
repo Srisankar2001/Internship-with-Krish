@@ -1,0 +1,94 @@
+Migration Guide
+
+This guide explains about the migration about the trip-service backend
+
+V1 - URL
+http://localhost:3000/v1/trip/search?from=srilanka&to=india&date=10-10-2025
+
+Response Format :
+{
+    to: string,
+    from: string,
+    date: string,
+    flightResponseDto: 
+        {
+            status:string,
+            flightList: 
+                {
+                    id: number,
+                    departTime: string,
+                    arriveTime: string,
+                    price: number
+                }
+        }
+    ,
+    hotelResponseDto: 
+    {
+        status:string,
+        hotelList:
+            {
+                id: number,
+                name: string,
+                rating: number,
+                pricePerNight: number
+            }
+    }
+    
+}
+
+V2 - URL
+http://localhost:3000/v2/trip/search?from=srilanka&to=india&date=10-10-2025
+
+Response Format :
+{
+    to: string,
+    from: string,
+    date: string,
+    flightResponseDto: 
+        {
+            status:string,
+            flightList: 
+                {
+                    id: number,
+                    departTime: string,
+                    arriveTime: string,
+                    price: number
+                }
+        }
+    ,
+    hotelResponseDto: 
+    {
+        status:string,
+        hotelList:
+            {
+                id: number,
+                name: string,
+                rating: number,
+                pricePerNight: number
+            }
+    },
+    weatherResponseDto:
+    {
+        degraded: boolean,
+        status: string,
+        weatherList:
+            {
+                date: string,
+                tempMin: number,
+                tempMax: number,
+                condition: string
+            }
+    }  
+}
+
+
+First of all we mesauare the v1, v2 request counts. 
+See the counts percentage change for a week. If the v2 is not heighter like greater than 95%, 
+Then we send waring with v1's response saying deprecated.
+
+Now, re-calculate the request percenatage. Even now the v2 count not reached the  95% of the requests, we 
+can't migrate to v2.
+
+So, if the 95% reached then,
+we create a Gateway to redirect the v1 traffic to v2.
+We can remove the v1-endpoint. Even users access the v1 endpoint, they'll get the v2's response.
